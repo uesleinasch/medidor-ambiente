@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#fff8f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a120e" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Meça paredes pela foto e com fita métrica em realidade aumentada, e gere a planta do ambiente." />
+    <title>Medidor de Ambiente</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="preload" href="fonts/roboto-flex-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <svg class="sprite" aria-hidden="true">
+      <symbol id="i-add" viewBox="0 -960 960 960"><path d="M440-440H240q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h200v-200q0-17 11.5-28.5T480-760q17 0 28.5 11.5T520-720v200h200q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H520v200q0 17-11.5 28.5T480-200q-17 0-28.5-11.5T440-240v-200Z"/></symbol>
+      <symbol id="i-add-a-photo" viewBox="0 -960 960 960"><path d="M440-440ZM120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h126l50-54q11-12 26.5-19t32.5-7h165q17 0 28.5 11.5T560-800q0 17-11.5 28.5T520-760H355l-73 80H120v480h640v-320q0-17 11.5-28.5T800-560q17 0 28.5 11.5T840-520v320q0 33-23.5 56.5T760-120H120Zm640-640h-40q-17 0-28.5-11.5T680-800q0-17 11.5-28.5T720-840h40v-40q0-17 11.5-28.5T800-920q17 0 28.5 11.5T840-880v40h40q17 0 28.5 11.5T920-800q0 17-11.5 28.5T880-760h-40v40q0 17-11.5 28.5T800-680q-17 0-28.5-11.5T760-720v-40ZM440-260q75 0 127.5-52.5T620-440q0-75-52.5-127.5T440-620q-75 0-127.5 52.5T260-440q0 75 52.5 127.5T440-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Z"/></symbol>
+      <symbol id="i-photo-camera" viewBox="0 -960 960 960"><path d="M480-260q75 0 127.5-52.5T660-440q0-75-52.5-127.5T480-620q-75 0-127.5 52.5T300-440q0 75 52.5 127.5T480-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM160-120q-33 0-56.5-23.5T80-200v-480q0-33 23.5-56.5T160-760h126l50-54q11-12 26.5-19t32.5-7h170q17 0 32.5 7t26.5 19l50 54h126q33 0 56.5 23.5T880-680v480q0 33-23.5 56.5T800-120H160Zm0-80h640v-480H638l-73-80H395l-73 80H160v480Zm320-240Z"/></symbol>
+      <symbol id="i-photo-library" viewBox="0 -960 960 960"><path d="m530-460-46-60q-6-8-16-8t-16 8l-67 88q-8 10-2.5 21t18.5 11h318q13 0 18.5-11t-2.5-21l-97-127q-6-8-16-8t-16 8l-76 99ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-520q0-17 11.5-28.5T120-720q17 0 28.5 11.5T160-680v520h520q17 0 28.5 11.5T720-120q0 17-11.5 28.5T680-80H160Zm160-720v480-480Z"/></symbol>
+      <symbol id="i-photo-library-filled" viewBox="0 -960 960 960"><path d="M360-400h400L622-580l-92 120-62-80-108 140Zm-40 160q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720h480v480H320v-480Z"/></symbol>
+      <symbol id="i-architecture" viewBox="0 -960 960 960"><path d="M444-484 336-186q-1 3-5 7l-32 31q-9 9-20.5 4.5T265-160l-4-43 1-9 112-310q15 14 32.5 23.5T444-484Zm36-36q-50 0-85-35t-35-85q0-39 22.5-69.5T440-752v-48q0-17 11.5-28.5T480-840q17 0 28.5 11.5T520-800v48q35 12 57.5 42.5T600-640q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm36 116q20-5 37.5-14.5T586-522l112 310q1 3 1 9l-4 43q-2 12-13.5 16.5T661-148l-32-31-5-7-108-298Z"/></symbol>
+      <symbol id="i-view-carousel" viewBox="0 -960 960 960"><path d="M80-360v-240q0-33 23.5-56.5T160-680q33 0 56.5 23.5T240-600v240q0 33-23.5 56.5T160-280q-33 0-56.5-23.5T80-360Zm280 160q-33 0-56.5-23.5T280-280v-400q0-33 23.5-56.5T360-760h240q33 0 56.5 23.5T680-680v400q0 33-23.5 56.5T600-200H360Zm360-160v-240q0-33 23.5-56.5T800-680q33 0 56.5 23.5T880-600v240q0 33-23.5 56.5T800-280q-33 0-56.5-23.5T720-360Zm-360 80h240v-400H360v400Zm120-200Z"/></symbol>
+      <symbol id="i-view-carousel-filled" viewBox="0 -960 960 960"><path d="M80-360v-240q0-33 23.5-56.5T160-680q33 0 56.5 23.5T240-600v240q0 33-23.5 56.5T160-280q-33 0-56.5-23.5T80-360Zm280 160q-33 0-56.5-23.5T280-280v-400q0-33 23.5-56.5T360-760h240q33 0 56.5 23.5T680-680v400q0 33-23.5 56.5T600-200H360Zm360-160v-240q0-33 23.5-56.5T800-680q33 0 56.5 23.5T880-600v240q0 33-23.5 56.5T800-280q-33 0-56.5-23.5T720-360Z"/></symbol>
+      <symbol id="i-close" viewBox="0 -960 960 960"><path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/></symbol>
+      <symbol id="i-check" viewBox="0 -960 960 960"><path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z"/></symbol>
+      <symbol id="i-undo" viewBox="0 -960 960 960"><path d="M320-200q-17 0-28.5-11.5T280-240q0-17 11.5-28.5T320-280h244q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l76 76q11 11 11 28t-11 28q-11 11-28 11t-28-11L188-572q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l144-144q11-11 28-11t28 11q11 11 11 28t-11 28l-76 76h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H320Z"/></symbol>
+      <symbol id="i-delete" viewBox="0 -960 960 960"><path d="M280-120q-33 0-56.5-23.5T200-200v-520q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h160q0-17 11.5-28.5T400-840h160q17 0 28.5 11.5T600-800h160q17 0 28.5 11.5T800-760q0 17-11.5 28.5T760-720v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM400-280q17 0 28.5-11.5T440-320v-280q0-17-11.5-28.5T400-640q-17 0-28.5 11.5T360-600v280q0 17 11.5 28.5T400-280Zm160 0q17 0 28.5-11.5T600-320v-280q0-17-11.5-28.5T560-640q-17 0-28.5 11.5T520-600v280q0 17 11.5 28.5T560-280ZM280-720v520-520Z"/></symbol>
+      <symbol id="i-edit" viewBox="0 -960 960 960"><path d="M200-200h57l391-391-57-57-391 391v57Zm-40 80q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm600-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></symbol>
+      <symbol id="i-more-vert" viewBox="0 -960 960 960"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></symbol>
+      <symbol id="i-arrow-upward" viewBox="0 -960 960 960"><path d="M440-647 244-451q-12 12-28 11.5T188-452q-11-12-11.5-28t11.5-28l264-264q6-6 13-8.5t15-2.5q8 0 15 2.5t13 8.5l264 264q11 11 11 27.5T772-452q-12 12-28.5 12T715-452L520-647v447q0 17-11.5 28.5T480-160q-17 0-28.5-11.5T440-200v-447Z"/></symbol>
+      <symbol id="i-arrow-downward" viewBox="0 -960 960 960"><path d="M440-313v-447q0-17 11.5-28.5T480-800q17 0 28.5 11.5T520-760v447l196-196q12-12 28-11.5t28 12.5q11 12 11.5 28T772-452L508-188q-6 6-13 8.5t-15 2.5q-8 0-15-2.5t-13-8.5L188-452q-11-11-11-27.5t11-28.5q12-12 28.5-12t28.5 12l195 195Z"/></symbol>
+      <symbol id="i-download" viewBox="0 -960 960 960"><path d="M480-337q-8 0-15-2.5t-13-8.5L308-492q-12-12-11.5-28t11.5-28q12-12 28.5-12.5T365-549l75 75v-286q0-17 11.5-28.5T480-800q17 0 28.5 11.5T520-760v286l75-75q12-12 28.5-11.5T652-548q11 12 11.5 28T652-492L508-348q-6 6-13 8.5t-15 2.5ZM240-160q-33 0-56.5-23.5T160-240v-80q0-17 11.5-28.5T200-360q17 0 28.5 11.5T240-320v80h480v-80q0-17 11.5-28.5T760-360q17 0 28.5 11.5T800-320v80q0 33-23.5 56.5T720-160H240Z"/></symbol>
+      <symbol id="i-door-front" viewBox="0 -960 960 960"><path d="M160-120q-17 0-28.5-11.5T120-160q0-17 11.5-28.5T160-200h40v-560q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v560h40q17 0 28.5 11.5T840-160q0 17-11.5 28.5T800-120H160Zm120-80h400v-560H280v560Zm280-240q17 0 28.5-11.5T600-480q0-17-11.5-28.5T560-520q-17 0-28.5 11.5T520-480q0 17 11.5 28.5T560-440ZM280-760v560-560Z"/></symbol>
+      <symbol id="i-window" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm320-320v240h240v-240H520Zm0-80h240v-240H520v240Zm-80 0v-240H200v240h240Zm0 80H200v240h240v-240Z"/></symbol>
+      <symbol id="i-straighten" viewBox="0 -960 960 960"><path d="M160-240q-33 0-56.5-23.5T80-320v-320q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v320q0 33-23.5 56.5T800-240H160Zm0-80h640v-320H680v120q0 17-11.5 28.5T640-480q-17 0-28.5-11.5T600-520v-120h-80v120q0 17-11.5 28.5T480-480q-17 0-28.5-11.5T440-520v-120h-80v120q0 17-11.5 28.5T320-480q-17 0-28.5-11.5T280-520v-120H160v320Zm160-160Zm160 0Zm160 0Zm-160 0Z"/></symbol>
+      <symbol id="i-height" viewBox="0 -960 960 960"><path d="M440-273v-414l-36 36q-11 11-27.5 11T348-652q-11-11-11-28t11-28l104-104q6-6 13-8.5t15-2.5q8 0 15 2.5t13 8.5l104 104q11 11 11 27.5T612-652q-12 12-28.5 12T555-652l-35-35v414l36-36q11-11 27.5-11t28.5 12q11 11 11 28t-11 28L508-148q-6 6-13 8.5t-15 2.5q-8 0-15-2.5t-13-8.5L348-252q-11-11-11.5-27.5T348-308q11-11 28-11t28 11l36 35Z"/></symbol>
+      <symbol id="i-restart-alt" viewBox="0 -960 960 960"><path d="M393-132q-103-29-168-113.5T160-440q0-57 19-108.5t54-94.5q11-12 27-12.5t29 12.5q11 11 11.5 27T290-586q-24 31-37 68t-13 78q0 81 47.5 144.5T410-209q13 4 21.5 15t8.5 24q0 20-14 31.5t-33 6.5Zm174 0q-19 5-33-7t-14-32q0-12 8.5-23t21.5-15q75-24 122.5-87T720-440q0-100-70-170t-170-70h-3l16 16q11 11 11 28t-11 28q-11 11-28 11t-28-11l-84-84q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l84-84q11-11 28-11t28 11q11 11 11 28t-11 28l-16 16h3q134 0 227 93t93 227q0 109-65 194T567-132Z"/></symbol>
+      <symbol id="i-tune" viewBox="0 -960 960 960"><path d="M480-120q-17 0-28.5-11.5T440-160v-160q0-17 11.5-28.5T480-360q17 0 28.5 11.5T520-320v40h280q17 0 28.5 11.5T840-240q0 17-11.5 28.5T800-200H520v40q0 17-11.5 28.5T480-120Zm-320-80q-17 0-28.5-11.5T120-240q0-17 11.5-28.5T160-280h160q17 0 28.5 11.5T360-240q0 17-11.5 28.5T320-200H160Zm160-160q-17 0-28.5-11.5T280-400v-40H160q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520h120v-40q0-17 11.5-28.5T320-600q17 0 28.5 11.5T360-560v160q0 17-11.5 28.5T320-360Zm160-80q-17 0-28.5-11.5T440-480q0-17 11.5-28.5T480-520h320q17 0 28.5 11.5T840-480q0 17-11.5 28.5T800-440H480Zm160-160q-17 0-28.5-11.5T600-640v-160q0-17 11.5-28.5T640-840q17 0 28.5 11.5T680-800v40h120q17 0 28.5 11.5T840-720q0 17-11.5 28.5T800-680H680v40q0 17-11.5 28.5T640-600Zm-480-80q-17 0-28.5-11.5T120-720q0-17 11.5-28.5T160-760h320q17 0 28.5 11.5T520-720q0 17-11.5 28.5T480-680H160Z"/></symbol>
+      <symbol id="i-square-foot" viewBox="0 -960 960 960"><path d="M208-120q-37 0-62.5-25.5T120-208v-548q0-29 27-40.5t47 8.5l90 90-54 54 28 28 54-54 104 104-54 54 28 28 54-54 104 104-54 54 28 28 54-54 104 104-54 54 28 28 54-54 80 80q20 20 8.5 47T756-120H208Zm32-120h332L240-572v332Z"/></symbol>
+      <symbol id="i-check-circle" viewBox="0 -960 960 960"><path d="m424-408-86-86q-11-11-28-11t-28 11q-11 11-11 28t11 28l114 114q12 12 28 12t28-12l226-226q11-11 11-28t-11-28q-11-11-28-11t-28 11L424-408Zm56 328q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></symbol>
+      <symbol id="i-error" viewBox="0 -960 960 960"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480v-160q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v160q0 17 11.5 28.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></symbol>
+      <symbol id="i-phone-android" viewBox="0 -960 960 960"><path d="M420-160h120q8 0 14-6t6-14q0-8-6-14t-14-6H420q-8 0-14 6t-6 14q0 8 6 14t14 6ZM280-40q-33 0-56.5-23.5T200-120v-720q0-33 23.5-56.5T280-920h400q33 0 56.5 23.5T760-840v720q0 33-23.5 56.5T680-40H280Zm0-200v120h400v-120H280Zm0-80h400v-400H280v400Zm0-480h400v-40H280v40Zm0 560v120-120Zm0-560v-40 40Z"/></symbol>
+      <symbol id="i-image" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z"/></symbol>
+      <symbol id="i-rotate-right" viewBox="0 -960 960 960"><path d="M790-478q-12 0-23.5-8.5T752-508q-5-19-12.5-37.5T722-581q-7-11-5-24.5t11-22.5q15-14 34.5-12t29.5 19q13 22 23 45t16 48q5 20-7.5 35T790-478ZM522-130q0-12 8.5-23.5T552-168q19-5 37.5-12.5T625-198q11-7 24.5-5t22.5 11q14 15 12 34.5T665-128q-23 13-46 22.5T572-89q-20 5-35-7t-15-34Zm206-118q-9-8-11-22t5-25q10-17 17.5-35.5T752-368q3-13 14-21.5t24-8.5q22 0 34 15t7 35q-7 24-16.5 47T792-255q-10 17-29.5 19T728-248ZM393-90q-119-32-195-128t-76-220q0-150 105-255t255-105h6l-35-35q-11-11-11-28t12-29q11-11 28-11t29 11l103 104q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L510-626q-11 11-28 11t-28-11q-11-11-11-28t11-28l36-36h-8q-117 0-198.5 81.5T202-438q0 97 59 171.5T412-168q13 3 21.5 14t8.5 24q0 21-14.5 33T393-90Z"/></symbol>
+      <symbol id="i-info" viewBox="0 -960 960 960"><path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></symbol>
+    </svg>
+
+    <div id="app" class="app">
+      <h1 class="visually-hidden">Medidor de Ambiente</h1>
+      <header class="top-app-bar">
+        <button id="room-title" class="room-title" type="button" aria-label="Renomear ambiente">
+          <span class="overline">Ambiente</span>
+          <span class="headline"><span id="room-name">Sala</span><svg class="icon small" aria-hidden="true"><use href="#i-edit" /></svg></span>
+        </button>
+        <button id="open-tape" class="btn tonal" type="button" hidden>
+          <svg class="icon" aria-hidden="true"><use href="#i-straighten" /></svg>Fita
+        </button>
+      </header>
+
+      <main class="content">
+        <section id="view-walls" class="view" aria-labelledby="nav-walls">
+          <article class="ceiling-card">
+            <div class="ceiling-head">
+              <svg class="icon" aria-hidden="true"><use href="#i-height" /></svg>
+              <span>Pé-direito</span>
+            </div>
+            <p id="ceiling-value" class="ceiling-value"></p>
+            <p id="ceiling-support" class="ceiling-support"></p>
+            <div class="button-row">
+              <button id="ceiling-ar" class="btn filled" type="button" hidden>
+                <svg class="icon" aria-hidden="true"><use href="#i-straighten" /></svg>Medir em AR
+              </button>
+              <button id="ceiling-edit" class="btn text" type="button">Digitar</button>
+            </div>
+          </article>
+
+          <div id="ar-hint" class="banner info" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-info" /></svg>
+            <p id="ar-hint-text"></p>
+          </div>
+
+          <div class="section-head">
+            <h2>Paredes</h2>
+            <span id="walls-count" class="badge"></span>
+          </div>
+
+          <ul id="wall-list" class="wall-list"></ul>
+
+          <div id="walls-empty" class="empty-state" hidden>
+            <div class="cookie"><svg class="icon" aria-hidden="true"><use href="#i-add-a-photo" /></svg></div>
+            <h3>Fotografe a primeira parede</h3>
+            <p>De frente, com os 4 cantos aparecendo. Depois siga pela sala sempre no mesmo sentido.</p>
+            <div class="button-row center">
+              <label class="btn filled">
+                <svg class="icon" aria-hidden="true"><use href="#i-photo-camera" /></svg>Tirar foto
+                <input type="file" accept="image/*" capture="environment" data-new-wall hidden />
+              </label>
+              <label class="btn outlined">
+                <svg class="icon" aria-hidden="true"><use href="#i-image" /></svg>Galeria
+                <input type="file" accept="image/*" data-new-wall hidden />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-plan" class="view" aria-labelledby="nav-plan" hidden></section>
+        <section id="view-elevations" class="view" aria-labelledby="nav-elevations" hidden></section>
+      </main>
+
+      <label id="fab-new-wall" class="fab" aria-label="Nova parede: tirar foto">
+        <svg class="icon" aria-hidden="true"><use href="#i-add-a-photo" /></svg>
+        <span>Nova parede</span>
+        <input type="file" accept="image/*" capture="environment" data-new-wall hidden />
+      </label>
+
+      <nav class="nav-bar" aria-label="Seções">
+        <button id="nav-walls" type="button" data-view="walls" data-icon="photo-library">
+          <span class="nav-indicator"><svg class="icon" aria-hidden="true"><use href="#i-photo-library-filled" /></svg></span>
+          <span class="nav-label">Paredes</span>
+        </button>
+        <button id="nav-plan" type="button" data-view="plan" data-icon="architecture">
+          <span class="nav-indicator"><svg class="icon" aria-hidden="true"><use href="#i-architecture" /></svg></span>
+          <span class="nav-label">Planta</span>
+        </button>
+        <button id="nav-elevations" type="button" data-view="elevations" data-icon="view-carousel">
+          <span class="nav-indicator"><svg class="icon" aria-hidden="true"><use href="#i-view-carousel" /></svg></span>
+          <span class="nav-label">Vistas</span>
+        </button>
+      </nav>
+    </div>
+
+    <section id="editor" class="editor" hidden>
+      <header class="editor-bar">
+        <button id="editor-close" class="icon-btn" type="button" aria-label="Fechar">
+          <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+        </button>
+        <button id="editor-title" class="editor-title" type="button" aria-label="Renomear parede">
+          <span id="editor-name"></span>
+          <svg class="icon small" aria-hidden="true"><use href="#i-edit" /></svg>
+        </button>
+        <button id="editor-save" class="btn filled small" type="button">Salvar</button>
+      </header>
+
+      <div class="editor-scroll">
+        <div class="stepper">
+          <div id="step-track" class="step-track"></div>
+          <p id="step-label" class="step-label"></p>
+        </div>
+
+        <div class="photo-stage">
+          <div id="marker-frame" class="marker-frame"><canvas id="marker"></canvas></div>
+          <div id="photo-empty" class="photo-empty" hidden>
+            <svg class="icon large" aria-hidden="true"><use href="#i-add-a-photo" /></svg>
+            <p>Esta parede ainda não tem foto</p>
+            <div class="button-row center">
+              <label class="btn filled">
+                Tirar foto
+                <input type="file" accept="image/*" capture="environment" data-replace-photo hidden />
+              </label>
+              <label class="btn tonal">
+                Galeria
+                <input type="file" accept="image/*" data-replace-photo hidden />
+              </label>
+            </div>
+          </div>
+          <div class="stage-chips">
+            <button id="scale-chip" class="stage-chip" type="button">
+              <svg class="icon small" aria-hidden="true"><use href="#i-height" /></svg><span id="scale-chip-label"></span>
+            </button>
+            <button id="photo-chip" class="stage-chip icon-only" type="button" aria-label="Trocar foto">
+              <svg class="icon small" aria-hidden="true"><use href="#i-photo-camera" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="instruction">
+          <div class="instruction-text">
+            <h3 id="instruction-title"></h3>
+            <p id="instruction-text"></p>
+          </div>
+          <div id="corner-dots" class="corner-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </div>
+
+        <div id="openings-panel" class="openings-panel" hidden>
+          <div class="button-row">
+            <button class="btn tonal" type="button" data-add-opening="door">
+              <svg class="icon" aria-hidden="true"><use href="#i-door-front" /></svg>Porta
+            </button>
+            <button class="btn tonal" type="button" data-add-opening="window">
+              <svg class="icon" aria-hidden="true"><use href="#i-window" /></svg>Janela
+            </button>
+          </div>
+          <ul id="opening-list" class="chip-set"></ul>
+        </div>
+
+        <article class="result-card">
+          <div class="result-values">
+            <div>
+              <span class="result-label">Largura</span>
+              <strong id="result-width" class="result-number"></strong>
+            </div>
+            <div>
+              <span class="result-label">Altura</span>
+              <strong id="result-height" class="result-number"></strong>
+            </div>
+          </div>
+          <p id="result-note" class="result-note"></p>
+          <button id="adjust-open" class="btn text" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#i-tune" /></svg>Ajustar
+          </button>
+        </article>
+      </div>
+
+      <div class="floating-toolbar" role="toolbar" aria-label="Pontos">
+        <button id="undo-point" class="icon-btn" type="button" aria-label="Desfazer ponto">
+          <svg class="icon" aria-hidden="true"><use href="#i-undo" /></svg>
+        </button>
+        <button id="clear-points" class="icon-btn" type="button" aria-label="Apagar pontos">
+          <svg class="icon" aria-hidden="true"><use href="#i-restart-alt" /></svg>
+        </button>
+        <button id="prev-step" class="btn text" type="button">Voltar</button>
+        <button id="next-step" class="toolbar-fab" type="button"></button>
+      </div>
+    </section>
+
+    <div id="snackbar" class="snackbar" role="status" aria-live="polite" hidden>
+      <span id="snackbar-text"></span>
+      <button id="snackbar-action" class="btn text inverse" type="button" hidden></button>
+    </div>
+
+    <div id="ar-overlay" class="ar-overlay" hidden>
+      <canvas id="ar-canvas" class="ar-canvas"></canvas>
+      <div class="ar-top">
+        <button id="ar-close" class="ar-round" type="button" aria-label="Fechar">
+          <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+        </button>
+        <div class="ar-modes" role="group" aria-label="Tipo de medida">
+          <button id="ar-mode-distance" type="button">
+            <svg class="icon small" aria-hidden="true"><use href="#i-straighten" /></svg>Distância
+          </button>
+          <button id="ar-mode-height" type="button">
+            <svg class="icon small" aria-hidden="true"><use href="#i-height" /></svg>Altura
+          </button>
+        </div>
+      </div>
+      <div id="ar-guide" class="ar-guide">
+        <svg class="icon" aria-hidden="true"><use href="#i-phone-android" /></svg>
+      </div>
+      <div id="ar-crosshair" class="ar-crosshair"></div>
+      <div class="ar-bottom">
+        <p id="ar-reading" class="ar-reading"></p>
+        <p id="ar-message" class="ar-message"></p>
+        <div class="ar-controls">
+          <button id="ar-undo" class="ar-round" type="button" aria-label="Desfazer">
+            <svg class="icon" aria-hidden="true"><use href="#i-undo" /></svg>
+          </button>
+          <button id="ar-action" class="ar-shutter" type="button" aria-label="Marcar ponto">
+            <svg class="icon" aria-hidden="true"><use href="#i-add" /></svg>
+          </button>
+          <button id="ar-use" class="btn filled large" type="button" hidden></button>
+          <span class="ar-spacer"></span>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "medidor-ambiente",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "start:https": "[ -f .certs/cert.pem ] || (mkdir -p .certs && openssl req -x509 -newkey rsa:2048 -nodes -days 365 -subj /CN=medidor-ambiente -keyout .certs/key.pem -out .certs/cert.pem) && python3 scripts/serve-https.py 8443",
+    "test": "node --test"
+  }
+}
