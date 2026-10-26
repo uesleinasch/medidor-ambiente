@@ -4,7 +4,27 @@ Web app para celular: mede o pé-direito com a câmera (realidade aumentada), fo
 e altura corrigindo a perspectiva da foto e gera a **planta baixa** da sala e o **desenho de cada parede** com
 portas e janelas. Sem build e sem dependências.
 
-## Rodar
+**App publicado:** https://uesleinasch.github.io/medidor-ambiente/ (GitHub Pages, PWA instalável e offline).
+
+## APK (Trusted Web Activity)
+
+O APK abre o app publicado pelo Chrome em tela cheia. Por isso a fita métrica em AR funciona dentro dele, o que
+não aconteceria num WebView. O projeto Android fica fora deste repositório, em `../medidor-ambiente-android`
+(gerado pelo [Bubblewrap](https://github.com/GoogleChromeLabs/bubblewrap)), junto com a chave de assinatura
+`android.keystore` e as senhas em `signing.env`. **Guarde cópia dos dois**: sem eles não dá para publicar
+atualizações do app com a mesma assinatura.
+
+```bash
+cd ../medidor-ambiente-android
+set -a && . ./signing.env && set +a
+npx @bubblewrap/cli build --skipPwaValidation   # gera app-release-signed.apk
+```
+
+Mudanças só no site (HTML/CSS/JS) chegam ao app sem gerar novo APK. Para mudar nome, ícone ou cores do
+app Android, edite `twa-manifest.json`, aumente `appVersionCode` e rode `npx @bubblewrap/cli update` antes do
+build. A verificação de domínio (`/.well-known/assetlinks.json`) está no repositório `uesleinasch.github.io`.
+
+## Rodar localmente
 
 ```bash
 npm start            # python3 -m http.server 8000
